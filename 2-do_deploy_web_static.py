@@ -3,7 +3,7 @@
 import os.path
 from fabric.api import env, put, run
 
-env.hosts = ["54.173.251.99", "52.91.125.177"]
+env.hosts = ["54.173.251.99", "52.91.125.177"]  # Update with your IP addresses
 
 
 def do_deploy(archive_path):
@@ -15,26 +15,31 @@ def do_deploy(archive_path):
         If the file doesn't exist at archive_path or an error occurs - False.
         Otherwise - True.
     """
-    if not os.path.isfile(archive_path):
+    if not os.path.exists(archive_path):
         return False
 
     file = os.path.basename(archive_path)
     name = os.path.splitext(file)[0]
 
-    remote_tmp = "/tmp/{}".format(file)
-    remote_release = "/data/web_static/releases/{}/".format(name)
-
-    try:
-        put(archive_path, remote_tmp)
-        run("rm -rf {}".format(remote_release))
-        run("mkdir -p {}".format(remote_release))
-        run("tar -xzf {} -C {}".format(remote_tmp, remote_release))
-        run("rm {}".format(remote_tmp))
-        run("mv {}/web_static/* {}".format(remote_release, remote_release))
-        run("rm -rf {}/web_static".format(remote_release))
-        run("rm -rf /data/web_static/current")
-        run("ln -s {} /data/web_static/current".format(remote_release))
-        return True
-    except Exception as e:
-        print(f"Error: {e}")
+    if put(archive_path, f"/tmp/{file}").failed:
         return False
+    if run(f"rm -rf /data/web_static/releases/{name}/").failed:
+        return False
+    if run(f"mkdir -p /data/web_static/releases/{name}/").failed:
+        return False
+    if run(f"tar -xzf /tmp/{file} -C /data/web_static/releases/{name}/").failed:
+        return False
+    if run(f"rm /tmp/{file}").failed:
+        return False
+    if run(f"mv /data/web_static/releases/{name}/web_static/* "
+           f"/data/web_static/releases/{name}/").failed:
+        return False
+    if run(f"rm -rf /data/web_static/releases/{name}/web_static").failed:
+        return False
+    if run("rm -rf /data/web_static/current").failed:
+        return False
+    if run(f"ln -s /data/web_static/releases/{name}/ "
+           f"/data/web_static/current").failed:
+        return False
+
+    return True
