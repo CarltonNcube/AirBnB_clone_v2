@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+Fabric script that distributes an archive to the web servers
+"""
+
 from fabric.api import put, run, env
 from os.path import exists
 
