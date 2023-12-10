@@ -7,10 +7,14 @@ from fabric.api import put, run, env
 from os.path import exists
 
 env.hosts = ["54.173.251.99", "52.91.125.177"]
+env.user = "ubuntu"
+env.key_filename = "~/.ssh/0-use_a_private_key"
+
 
 def do_deploy(archive_path):
     """Distributes an archive to the web servers."""
     if not exists(archive_path):
+        print(f"Error: Archive file {archive_path} does not exist.")
         return False
 
     try:
@@ -45,7 +49,8 @@ def do_deploy(archive_path):
         # Create a new symbolic link
         run('ln -s {}{}/ /data/web_static/current'.format(path, name_no_ext))
 
+        print("New version deployed!")
         return True
     except Exception as e:
-        print(e)
+        print(f"Error during deployment: {e}")
         return False
