@@ -1,0 +1,37 @@
+States
+
+{% for state in states.values()|sort(attribute="name") %}
+    {{ state.name }}
+    {% for city in state.cities|sort(attribute="name") %}
+        {{ city.name }}
+    {% endfor %}
+{% endfor %}
+
+Amenities
+
+{% for amenity in amenities.values()|sort(attribute="name") %}
+    {{ amenity.name }}
+{% endfor %}
+
+Places
+{% for place in places.values()|sort(attribute="name") %}
+    {{ place.name }}
+    ${{ place.price_by_night }}
+
+    {{ place.max_guest }} Guests
+
+    {{ place.number_rooms }} Rooms
+
+    {{ place.number_bathrooms }} Bathrooms
+    Owner: {{ place.user.first_name }} {{ place.user.last_name }}
+    {{ place.description|safe }}
+    Amenities
+    {% for amenity in place.amenities|sort(attribute="name") %}
+        {{ amenity.name }}
+    {% endfor %}
+    {{ place.reviews.__len__() }} Reviews
+    {% for review in place.reviews %}
+        From {{ review.user.first_name }} the {{ review.created_at.date().__str__() }}
+        {{ review.text|safe }}
+    {% endfor %}
+{% endfor %}
