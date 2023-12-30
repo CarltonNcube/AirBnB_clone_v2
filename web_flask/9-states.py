@@ -6,9 +6,13 @@ Routes:
     /states: HTML page with a list of all State objects.
     /states/<id>: HTML page displaying the given state with <id>.
 """
+import sys
+import os
 from models import storage
-from flask import Flask
-from flask import render_template
+from flask import Flask, render_template
+
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 
 app = Flask(__name__)
 
@@ -40,3 +44,4 @@ def teardown(exc):
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
+
