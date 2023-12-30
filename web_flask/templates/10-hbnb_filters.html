@@ -1,52 +1,39 @@
 <!DOCTYPE html>
-<HTML lang="en">
-  <HEAD>
-    <TITLE>HBNB</TITLE>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/3-header.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/3-footer.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/4-common.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/6-filters.css') }}">
-  </HEAD>
-  <BODY>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Display</title>
+</head>
+<body>
 
-    <HEADER class="header">
-      <div class="container">
-        <div class="logo"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="HBNB logo"></div>
-        <h1>HBNB</h1>
-      </div>
-    </HEADER>
-
-    <SECTION class="filters">
-      <div class="container">
-        <div class="locations">
-          <H3>States</H3>
-          <div class="popover">
-            <button class="all">All</button>
-            {% for state in states %}
-              <input type="checkbox" name="state" id="{{ state.id }}" />
-              <label for="{{ state.id }}">{{ state.name }}</label>
+<h1>States</h1>
+<ul>
+    {% for state in states.values()|sort(attribute="name") %}
+    <li>
+        {{ state.name }}
+        <ul>
+            {% for city in state.cities|sort(attribute="name") %}
+            <li>
+                {{ city.name }}
+            </li>
             {% endfor %}
-          </div>
-        </div>
-        <div class="locations">
-          <H3>Amenities</H3>
-          <div class="popover">
-            <button class="all">All</button>
-            {% for amenity in amenities %}
-              <input type="checkbox" name="amenity" id="{{ amenity.id }}" />
-              <label for="{{ amenity.id }}">{{ amenity.name }}</label>
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-    </SECTION>
+        </ul>
+    </li>
+    {% endfor %}
+</ul>
 
-    <FOOTER class="footer">
-      <div class="container">
-        <p>Footer</p>
-      </div>
-    </FOOTER>
+<h1>Amenities</h1>
+<ul>
+    {% for amenity in amenities.values()|sort(attribute="name") %}
+    <li>
+        {{ amenity.name }}
+    </li>
+    {% endfor %}
+</ul>
 
-  </BODY>
-</HTML>
+<p>Holberton School</p>
+
+</body>
+</html>
 
