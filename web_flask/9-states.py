@@ -6,7 +6,6 @@ This script starts a Flask web application.
 from flask import Flask, render_template
 from models import storage
 from models.state import State
-from models.city import City
 
 app = Flask(__name__)
 
@@ -24,11 +23,9 @@ def states():
 def state_cities(id):
     """Route that displays a HTML page with cities of a specific State."""
     state = storage.get(State, id)
-    if state:
-        cities = sorted(state.cities, key=lambda city: city.name)
-        return render_template('9-states.html', state=state, cities=cities)
-    else:
-        return render_template('9-states.html', not_found=True)
+    cities = state.cities if state else None
+
+    return render_template('9-states.html', state=state, cities=cities)
 
 
 @app.teardown_appcontext
