@@ -19,23 +19,29 @@ def states_list():
 
     States are sorted by name.
     """
-    states = storage.all("State").values()
-    sorted_states = sorted(states, key=lambda state: state.name)
-    return render_template("9-states.html", states=sorted_states,
-                           state=None, cities=None)
+    try:
+        states = storage.all("State").values()
+        sorted_states = sorted(states, key=lambda state: state.name)
+        return render_template("9-states.html", states=sorted_states,
+                               state=None, cities=None)
+    except Exception as e:
+        return f"Error: {str(e)}"
 
 
 @app.route("/states/<id>", strict_slashes=False)
 def state_details(id):
     """Displays an HTML page with info about <id>, if it exists."""
-    states = storage.all("State").values()
-    sorted_states = sorted(states, key=lambda state: state.name)
+    try:
+        states = storage.all("State").values()
+        sorted_states = sorted(states, key=lambda state: state.name)
 
-    state = next((s for s in sorted_states if s.id == id), None)
-    cities = state.cities if state and hasattr(state, 'cities') else None
+        state = next((s for s in sorted_states if s.id == id), None)
+        cities = state.cities if state and hasattr(state, 'cities') else None
 
-    return render_template("9-states.html", states=sorted_states,
-                           state=state, cities=cities)
+        return render_template("9-states.html", states=sorted_states,
+                               state=state, cities=cities)
+    except Exception as e:
+        return f"Error: {str(e)}"
 
 
 @app.teardown_appcontext
@@ -45,4 +51,4 @@ def teardown(exc):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=True)
