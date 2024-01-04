@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 @app.route('/cities_by_states', strict_slashes=False)
 def cities_by_states():
-    """Route that displays a HTML page with a list of all State and City objects."""
+    """Displays a HTML page with a list of all State & City objects."""
     states = storage.all(State).values()
     sorted_states = sorted(states, key=lambda state: state.name)
 
@@ -28,4 +28,3 @@ def teardown_appcontext(exception):
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
-
