@@ -22,7 +22,7 @@ def states_list():
     states = storage.all("State").values()
     sorted_states = sorted(states, key=lambda state: state.name)
     return render_template("9-states.html", states=sorted_states,
-            state=None, cities=None)
+                           state=None, cities=None)
 
 
 @app.route("/states/<id>", strict_slashes=False)
@@ -35,7 +35,7 @@ def state_details(id):
     cities = state.cities if state and hasattr(state, 'cities') else None
 
     return render_template("9-states.html", states=sorted_states,
-            state=state, cities=cities)
+                           state=state, cities=cities)
 
 
 @app.teardown_appcontext
@@ -46,4 +46,3 @@ def teardown(exc):
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
-
