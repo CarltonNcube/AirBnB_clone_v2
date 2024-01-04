@@ -23,9 +23,9 @@ def states_list():
         states = storage.all("State").values()
         sorted_states = sorted(states, key=lambda state: state.name)
         return render_template("9-states.html", states=sorted_states,
-                               state=None, cities=None)
+                               state=None, cities=None), 200
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"Error: {str(e)}", 500
 
 
 @app.route("/states/<id>", strict_slashes=False)
@@ -39,9 +39,9 @@ def state_details(id):
         cities = state.cities if state and hasattr(state, 'cities') else None
 
         return render_template("9-states.html", states=sorted_states,
-                               state=state, cities=cities)
+                               state=state, cities=cities), 200
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"Error: {str(e)}", 500
 
 
 @app.teardown_appcontext
